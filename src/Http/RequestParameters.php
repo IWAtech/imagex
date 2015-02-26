@@ -1,6 +1,6 @@
 <?php
 /**
- * User: thomasklaner
+ * Author: thomasklaner
  * Date: 26/02/15
  * Time: 14:21
  */
@@ -9,7 +9,7 @@ namespace Http;
 
 /**
  * Class RequestParameters
- *
+ * Simple class to ease and validate request parameters
  */
 class RequestParameters {
 

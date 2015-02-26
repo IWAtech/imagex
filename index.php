@@ -6,7 +6,7 @@
  *      find ./cache -mtime +30 -type f -delete
  *
  *
- * User: thomasklaner
+ * Author: thomasklaner
  * Date: 26/02/15
  * Time: 10:56
  */
