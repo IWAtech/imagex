@@ -1,0 +1,21 @@
+{
+    "name": "updatemi/imagex",
+    "description": "A simple image service which support cropping with a focus point",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Klaner",
+            "email": "thomas@iwa-tech.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "ext-imagick": "3.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Http": "src/"
+        }
+    }
+}

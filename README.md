@@ -16,7 +16,7 @@ imagex - Lean Image Service
 #### Optional Apache Config for clean URLs
 If you have mod_rewrite installed on your Apache server you can use following rewrite rule to enable clean URLs for the imagex service:
 ```
-  RewriteRule (crop|resize)\/([0-9]*)\/([0-9]*)(\/([-+]?[0-1]+\.?[0-9]*)\/([-+]?[0-1]+\.?[0-9]*))?\/(.*)$ %{ENV:BASE}/index.php?mode=$1&width=$2&height=$3&x=$5&y=$6&url=$7 [NE,L]
+  RewriteRule (crop|resize)\/([0-9]*)\/([0-9]*)(\/([-+]?[0-1]+\.?[0-9]*)\/([-+]?[0-1]+\.?[0-9]*))?\/(.*)$ %{ENV:BASE}/imagex.php?mode=$1&width=$2&height=$3&x=$5&y=$6&url=$7 [NE,L]
 ```
 After an apache restart you can also use imagex with URLs like the following:
 ```
@@ -25,7 +25,7 @@ http://imagex.updatemi.local/crop/400/280/0.18/0.25/http://upload.wikimedia.org/
 
 ## Usage
 ```
-http://my.domain.com/imagex/?url=http://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg&mode=crop&width=400&height=280&x=0.18&y=0.25
+http://my.domain.com/imagex.php?url=http://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg&mode=crop&width=400&height=280&x=0.18&y=0.25
 ```
 
 ## Parameters

@@ -11,7 +11,7 @@
  * Time: 10:56
  */
 
-require_once('src/Http/RequestParameters.php');
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Http\RequestParameters;
 
