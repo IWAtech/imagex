@@ -5,7 +5,7 @@
  * Time: 14:21
  */
 
-namespace Http;
+namespace Imagex\Http;
 
 /**
  * Class RequestParameters

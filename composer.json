@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Http": "src/"
+            "Imagex": "src/"
         }
     }
 }
