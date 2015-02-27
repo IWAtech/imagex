@@ -44,9 +44,10 @@ X-coordinate of the focus point used for cropping the image. Value must be betwe
 Y-coordinate of the focus point used for cropping the image. Value must be between *-1* and *1*. Default is *0* - the middle of the axis. See below for more information about the focus point functionality.
 
 ## More details about the focus point
-This is basically implemented the same way as in the [https://github.com/jonom/jquery-focuspoint jquery-focuspoint plugin]:
-An image's focus point is made up of x (horizontal) and y (vertical) coordinates. The value of a coordinate can be a number with decimal points anywhere between -1 and +1, where 0 is the centre. X:-1 indicates the left edge of the image, x:1 the right edge. For the y axis, y:1 is the top edge and y:-1 is the bottom.
+This is basically implemented the same way as in the [https://github.com/jonom/jquery-focuspoint](jquery-focuspoint plugin):
 
-![image](https://raw.githubusercontent.com/jonom/jquery-focuspoint/master/demos/img/grid.png)
-
-**Confused?** Don't worry, there's a handy script included to help you find the focus coordinates of an image with a single click. Check out the [helper tool](http://jonom.github.io/jquery-focuspoint/demos/helper/index.html) *(vastly improved courtesy of [@auginator](https://github.com/auginator)).*
+> An image's focus point is made up of x (horizontal) and y (vertical) coordinates. The value of a coordinate can be a number with decimal points anywhere between -1 and +1, where 0 is the centre. X:-1 indicates the left edge of the image, x:1 the right edge. For the y axis, y:1 is the top edge and y:-1 is the bottom.
+>
+> ![image](https://raw.githubusercontent.com/jonom/jquery-focuspoint/master/demos/img/grid.png)
+>
+> **Confused?** Don't worry, there's a handy script included to help you find the focus coordinates of an image with a single click. Check out the [helper tool](http://jonom.github.io/jquery-focuspoint/demos/helper/index.html) *(vastly improved courtesy of [@auginator](https://github.com/auginator)).*
