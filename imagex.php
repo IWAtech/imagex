@@ -13,10 +13,16 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Imagex\Imagex;
+use Imagex\Http\RequestParameterException;
 
-// initialize imagex and process request
-$imagex = new Imagex(array('cache_directory' => __DIR__ . '/cache/'));
-$imagex->process($_GET);
+try {
+    // initialize imagex and process request
+    $imagex = new Imagex(array('cache_directory' => __DIR__ . '/cache/'));
+    $imagex->process($_GET);
 
-// sets file header and prints image
-$imagex->renderImage();
+    // sets file header and prints image
+    $imagex->renderImage();
+} catch(RequestParameterException $exception) {
+    header('HTTP/1.0 400 Bad Request', true, 400);
+    echo $exception->getMessage();
+}

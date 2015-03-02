@@ -40,7 +40,7 @@ class Imagex {
 
     public function process(array $params) {
         $this->parameters = new RequestParameters($params, array(
-            'url' => array('required' => true),
+            'url' => array('required' => true, 'type' => RequestParameters::TYPE_URL),
             'mode' => array('required' => false, 'default' => 'resize'),
             'width' => array('required' => false, 'default' => 0),
             'height' => array('required' => false, 'default' => 0),
@@ -49,12 +49,12 @@ class Imagex {
         ));
 
         // Before starting new image processing check if resized image is already available
-        $imageFileName =  $this->getConfigPath('cache_directory') . $this->getConfigPath('thumbs_cache_directory') . $this->parameters->getHash() . '.thumb';
+        $imageFileName = $this->getThumbPath($this->parameters);
         if(file_exists($imageFileName)) {
             $this->image = new Imagick($imageFileName);
         } else {
             // Cache input/source image
-            $sourceImageFileName = $this->getConfigPath('cache_directory') . $this->getConfigPath('source_cache_directory') . md5($this->parameters->get('url')) . '.orig';
+            $sourceImageFileName = $this->getImagePath($this->parameters->get('url'));
             if(!file_exists($sourceImageFileName)) {
                 file_put_contents($sourceImageFileName, file_get_contents($this->parameters->get('url')));
             }
@@ -87,6 +87,30 @@ class Imagex {
     public function renderImage() {
         header('Content-type: ' . $this->image->getimagemimetype());
         echo $this->image;
+    }
+
+    protected function getImagePath($url) {
+        return $this->ensurePathExists($this->getConfigPath('cache_directory') . $this->getConfigPath('source_cache_directory') . base64_encode($url) . '.orig');
+    }
+
+    protected function getThumbPath(RequestParameters $parameters) {
+        $fileName = join('/', array(
+            $parameters->get('mode'),
+            $parameters->get('width'),
+            $parameters->get('height'),
+            $parameters->get('x'),
+            $parameters->get('y'),
+            base64_encode($parameters->get('url'))
+        ));
+        return $this->ensurePathExists($this->getConfigPath('cache_directory') . $this->getConfigPath('thumbs_cache_directory') . $fileName . '.thumb');
+    }
+
+    private function ensurePathExists($path) {
+        $folder = substr($path, 0, strrpos($path, '/'));
+        if(!is_dir($folder)) {
+            mkdir($folder, 0755, true);
+        }
+        return $path;
     }
 
     protected function getConfigPath($name) {
