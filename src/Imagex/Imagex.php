@@ -30,7 +30,8 @@ class Imagex {
         $defaultConfig = array(
             'cache_directory' => 'cache',
             'source_cache_directory' => 'source',
-            'thumbs_cache_directory' => 'thumbs'
+            'thumbs_cache_directory' => 'thumbs',
+            'sourceUrlProxy' => false,
         );
         $this->config = array();
         foreach($defaultConfig as $key => $value) {
@@ -56,7 +57,11 @@ class Imagex {
             // Cache input/source image
             $sourceImageFileName = $this->getImagePath($this->parameters->get('url'));
             if(!file_exists($sourceImageFileName)) {
-                file_put_contents($sourceImageFileName, file_get_contents($this->parameters->get('url')));
+                $sourceUrl = $this->parameters->get('url');
+                if($this->config['sourceUrlProxy']) {
+                    $sourceUrl = $this->config['sourceUrlProxy'] . urlencode($sourceUrl);
+                }
+                file_put_contents($sourceImageFileName, file_get_contents($sourceUrl));
             }
             $this->image = new Imagick($sourceImageFileName);
 
