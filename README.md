@@ -20,7 +20,7 @@ If you have mod_rewrite installed on your Apache server you can use following re
 ```
 After an apache restart you can also use imagex with URLs like the following:
 ```
-http://imagex.updatemi.local/crop/400/280/0.18/0.25/http://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg
+http://my.domain.com/crop/400/280/0.18/0.25/http://upload.wikimedia.org/wikipedia/commons/e/e9/Official_portrait_of_Barack_Obama.jpg
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ http://my.domain.com/imagex.php?url=http://upload.wikimedia.org/wikipedia/common
 ## Parameters
 The following 6 parameters are currently available: 
 #### url *(required)*
-The url of the image you want to resize/crop/proxy.
+The url of the image you want to resize/crop/proxy. *You can also base64-encode the url parameter if you like.*
 #### mode
 Currently two modes are available: *"resize"* and *"crop"*. Default is *"resize"*.
 #### width
