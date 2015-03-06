@@ -17,7 +17,9 @@ use Imagex\Http\RequestParameterException;
 
 try {
     // initialize imagex and process request
-    $imagex = new Imagex(array('cache_directory' => __DIR__ . '/cache/'));
+    $imagex = new Imagex(array(
+        'cache_directory' => __DIR__ . '/cache/',
+    ));
     $imagex->process($_GET);
 
     // sets file header and prints image

@@ -17,6 +17,9 @@ use Imagex\Http\RequestParameters;
 
 class Imagex {
 
+    const ENCODER_MD5    = 'md5';
+    const ENCODER_BASE64 = 'base64';
+
     /** @var array */
     protected $config;
 
@@ -31,7 +34,8 @@ class Imagex {
             'cache_directory' => 'cache',
             'source_cache_directory' => 'source',
             'thumbs_cache_directory' => 'thumbs',
-            'sourceUrlProxy' => false,
+            'source_url_proxy' => false,
+            'create_cdn_attributes' => false,
         );
         $this->config = array();
         foreach($defaultConfig as $key => $value) {
@@ -58,8 +62,8 @@ class Imagex {
             $sourceImageFileName = $this->getImagePath($this->parameters->get('url'));
             if(!file_exists($sourceImageFileName)) {
                 $sourceUrl = $this->parameters->get('url');
-                if($this->config['sourceUrlProxy']) {
-                    $sourceUrl = $this->config['sourceUrlProxy'] . urlencode($sourceUrl);
+                if($this->config['source_url_proxy']) {
+                    $sourceUrl = $this->config['source_url_proxy'] . urlencode($sourceUrl);
                 }
                 file_put_contents($sourceImageFileName, file_get_contents($sourceUrl));
             }
@@ -86,28 +90,39 @@ class Imagex {
             // Cache/Store output image
             $imageExtension = strtolower($this->image->getimageformat());
             $this->image->writeimage(($imageExtension == 'jpeg' ? 'jpg' : $imageExtension) .':' . $imageFileName);
+
+            if($this->config['create_cdn_attributes'] === true) {
+                exec('setfattr -n user.cdn_path -v "' . $this->getThumbFileName($this->parameters, self::ENCODER_BASE64) . '" ' . $imageFileName);
+            }
         }
     }
 
     public function renderImage() {
+        header('Pragma: public');
+        header('Cache-Control: max-age=86400');
+        header('Expires: '. gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
         header('Content-type: ' . $this->image->getimagemimetype());
         echo $this->image;
     }
 
-    protected function getImagePath($url) {
-        return $this->ensurePathExists($this->getConfigPath('cache_directory') . $this->getConfigPath('source_cache_directory') . base64_encode($url) . '.orig');
+    protected function getImagePath($url, $encoder = self::ENCODER_MD5) {
+        $filename = $encoder == self::ENCODER_BASE64 ? base64_encode($url) : md5($url);
+        return $this->ensurePathExists($this->getConfigPath('cache_directory') . $this->getConfigPath('source_cache_directory') . $filename . '.orig');
     }
 
-    protected function getThumbPath(RequestParameters $parameters) {
-        $fileName = join('/', array(
+    protected function getThumbFileName(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
+        return join('/', array(
             $parameters->get('mode'),
             $parameters->get('width'),
             $parameters->get('height'),
             $parameters->get('x'),
             $parameters->get('y'),
-            base64_encode($parameters->get('url'))
+            $encoder == self::ENCODER_BASE64 ? base64_encode($parameters->get('url')) : md5($parameters->get('url'))
         ));
-        return $this->ensurePathExists($this->getConfigPath('cache_directory') . $this->getConfigPath('thumbs_cache_directory') . $fileName . '.thumb');
+    }
+
+    protected function getThumbPath(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
+        return $this->ensurePathExists($this->getConfigPath('cache_directory') . $this->getConfigPath('thumbs_cache_directory') . $this->getThumbFileName($parameters, $encoder) . '.thumb');
     }
 
     private function ensurePathExists($path) {
@@ -125,4 +140,4 @@ class Imagex {
     private function ensureTrailingSlash($path) {
         return strrpos($path, '/') == strlen($path)-1 ? $path : $path . '/';
     }
-} 
+}
