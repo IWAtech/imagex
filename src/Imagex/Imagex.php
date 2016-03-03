@@ -34,6 +34,7 @@ class Imagex {
             'cache_directory' => 'cache',
             'source_cache_directory' => 'source',
             'thumbs_cache_directory' => 'thumbs',
+            'temp_directory' => 'tmp',
             'source_url_proxy' => false,
             'create_cdn_attributes' => false,
         );
@@ -89,7 +90,9 @@ class Imagex {
 
             // Cache/Store output image
             $imageExtension = strtolower($this->image->getimageformat());
-            $this->image->writeimage(($imageExtension == 'jpeg' ? 'jpg' : $imageExtension) .':' . $imageFileName);
+            $tmpFileName = $this->getTempPath($this->parameters);
+            $this->image->writeimage(($imageExtension == 'jpeg' ? 'jpg' : $imageExtension) .':' . $tmpFileName);
+            @rename($tmpFileName, $imageFileName);
 
             if($this->config['create_cdn_attributes'] === true) {
                 exec('setfattr -n user.cdn_path -v "' . $this->getThumbFileName($this->parameters, self::ENCODER_BASE64) . '" ' . $imageFileName);
@@ -119,6 +122,10 @@ class Imagex {
             $parameters->get('y'),
             $encoder == self::ENCODER_BASE64 ? base64_encode($parameters->get('url')) : md5($parameters->get('url'))
         ));
+    }
+
+    protected function getTempPath(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
+        return $this->ensurePathExists($this->getConfigPath('temp_directory') . $this->getConfigPath('thumbs_cache_directory') . $this->getThumbFileName($parameters, $encoder) . '.thumb');
     }
 
     protected function getThumbPath(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
