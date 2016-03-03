@@ -113,8 +113,8 @@ class Imagex {
         return $this->ensurePathExists($this->getConfigPath('cache_directory') . $this->getConfigPath('source_cache_directory') . $filename . '.orig');
     }
 
-    protected function getThumbFileName(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
-        return join('/', array(
+    protected function getThumbFileName(RequestParameters $parameters, $encoder = self::ENCODER_MD5, $separator = '/') {
+        return join($separator, array(
             $parameters->get('mode'),
             $parameters->get('width'),
             $parameters->get('height'),
@@ -125,7 +125,7 @@ class Imagex {
     }
 
     protected function getTempPath(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
-        return $this->ensurePathExists($this->getConfigPath('temp_directory') . $this->getConfigPath('thumbs_cache_directory') . $this->getThumbFileName($parameters, $encoder) . '.thumb');
+        return $this->ensurePathExists($this->getConfigPath('temp_directory') . $this->getThumbFileName($parameters, $encoder, '-') . '.thumb');
     }
 
     protected function getThumbPath(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
