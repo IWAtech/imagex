@@ -44,6 +44,10 @@ class Imagex {
         }
     }
 
+    /**
+     * @param array $params
+     * @throws \Exception
+     */
     public function process(array $params) {
         $this->parameters = new RequestParameters($params, array(
             'url' => array('required' => true, 'type' => RequestParameters::TYPE_URL),
@@ -66,7 +70,13 @@ class Imagex {
                 if($this->config['source_url_proxy']) {
                     $sourceUrl = $this->config['source_url_proxy'] . urlencode($sourceUrl);
                 }
-                file_put_contents($sourceImageFileName, file_get_contents($sourceUrl));
+                $download = @file_get_contents($sourceUrl);
+                if($download) {
+                    file_put_contents($sourceImageFileName, $download);
+                } else {
+                    trigger_error('[IMAGEX-ERROR] Could not successfully download "' . $this->parameters->get('url') . '" ('. $sourceUrl . ')');
+                    throw new \Exception('Could not successfully download "' . $sourceUrl . '"', 503);
+                }
             }
             $this->image = new Imagick($sourceImageFileName);
 
@@ -101,6 +111,8 @@ class Imagex {
     }
 
     public function renderImage() {
+        if(!$this->image) return null;
+
         header('Pragma: public');
         header('Cache-Control: max-age=86400');
         header('Expires: '. gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
