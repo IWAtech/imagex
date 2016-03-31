@@ -74,7 +74,7 @@ class Imagex {
                 if($download) {
                     file_put_contents($sourceImageFileName, $download);
                 } else {
-                    trigger_error('[IMAGEX-ERROR] Could not successfully download "' . $this->parameters->get('url') . '" ('. $sourceUrl . ')');
+                    trigger_error('[IMAGEX-ERROR] Could not successfully download "' . $this->parameters->get('url') . '" ('. $sourceUrl . ')', E_USER_WARNING);
                     throw new \Exception('Could not successfully download "' . $sourceUrl . '"', 503);
                 }
             }
