@@ -56,7 +56,7 @@ class Imagex {
             'height' => array('required' => false, 'default' => 0),
             'x' => array('required' => false, 'default' => 0),
             'y' => array('required' => false, 'default' => 0),
-            'cache' => array('required' => false, 'default' => true)
+            'cache' => array('required' => false, 'default' => true, 'type' => RequestParameters::TYPE_BOOL)
         ));
 
         // Before starting new image processing check if resized image is already available

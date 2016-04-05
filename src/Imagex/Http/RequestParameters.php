@@ -14,6 +14,7 @@ namespace Imagex\Http;
 class RequestParameters {
 
     const TYPE_URL = 'url';
+    const TYPE_BOOL = 'bool';
 
     /** @var array */
     protected $constraints;
@@ -77,6 +78,11 @@ class RequestParameters {
                             throw new RequestParameterException('Request parameter "' . $name . '" is not a valid URL!');
                         }
                     }
+                    break;
+                case self::TYPE_BOOL:
+                    // ensure param is bool
+                    $value = $this->params[$name];
+                    $this->params[$name] = in_array($value, [1, '1', true, 'true'], true);
                     break;
             }
         }

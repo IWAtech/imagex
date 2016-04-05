@@ -16,7 +16,7 @@ imagex - Lean Image Service
 #### Optional Apache Config for clean URLs
 If you have mod_rewrite installed on your Apache server you can use following rewrite rule to enable clean URLs for the imagex service:
 ```
-  RewriteRule (crop|resize)\/([0-9]*)\/([0-9]*)(\/([-+]?[0-1]+\.?[0-9]*)\/([-+]?[0-1]+\.?[0-9]*))?\/(.*)$ %{ENV:BASE}/imagex.php?mode=$1&width=$2&height=$3&x=$5&y=$6&url=$7 [NE,L]
+  RewriteRule (crop|resize)\/([0-9]*)\/([0-9]*)(\/([-+]?[0-1]+\.?[0-9]*)\/([-+]?[0-1]+\.?[0-9]*))?\/([A-Za-z0-9+/=]+)(:(nocache))?$ %{ENV:BASE}/imagex.php?mode=$1&width=$2&height=$3&x=$5&y=$6&url=$7&cache=$9 [NE,L]
 ```
 After an apache restart you can also use imagex with URLs like the following:
 ```
