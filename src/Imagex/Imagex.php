@@ -55,17 +55,18 @@ class Imagex {
             'width' => array('required' => false, 'default' => 0),
             'height' => array('required' => false, 'default' => 0),
             'x' => array('required' => false, 'default' => 0),
-            'y' => array('required' => false, 'default' => 0)
+            'y' => array('required' => false, 'default' => 0),
+            'cache' => array('required' => false, 'default' => true)
         ));
 
         // Before starting new image processing check if resized image is already available
         $imageFileName = $this->getThumbPath($this->parameters);
-        if(file_exists($imageFileName)) {
+        if($this->parameters->get('cache') && file_exists($imageFileName)) {
             $this->image = new Imagick($imageFileName);
         } else {
             // Cache input/source image
             $sourceImageFileName = $this->getImagePath($this->parameters->get('url'));
-            if(!file_exists($sourceImageFileName)) {
+            if(!$this->parameters->get('cache') || !file_exists($sourceImageFileName)) {
                 $sourceUrl = $this->parameters->get('url');
                 if($this->config['source_url_proxy']) {
                     $sourceUrl = $this->config['source_url_proxy'] . urlencode($sourceUrl);
