@@ -71,7 +71,7 @@ class RequestParameters {
                 case self::TYPE_URL:
                     // Allow base64 encoded URLs as well
                     if(strpos($this->params[$name], 'http') !== 0) {
-                        $decoded = base64_decode($this->params[$name], true);
+                        $decoded = base64_decode(str_replace(' ','+',$this->params[$name]), true);
                         if($decoded !== false) {
                             $this->params[$name] = $decoded;
                         } else {
