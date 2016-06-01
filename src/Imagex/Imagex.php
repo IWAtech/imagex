@@ -71,10 +71,12 @@ class Imagex {
                 if($this->config['source_url_proxy']) {
                     $sourceUrl = $this->config['source_url_proxy'] . urlencode($sourceUrl);
                 }
-                $download = @file_get_contents($sourceUrl);
-                if($download) {
-                    file_put_contents($sourceImageFileName, $download);
+                $tmpFileName = $this->getRandomTempPath();
+                $success = @copy($sourceUrl, $tmpFileName);
+                if($success) {
+                    @rename($tmpFileName, $sourceImageFileName);
                 } else {
+                    @unlink($tmpFileName);
                     trigger_error('[IMAGEX-ERROR] Could not successfully download "' . $this->parameters->get('url') . '" ('. $sourceUrl . ')', E_USER_WARNING);
                     throw new \Exception('Could not successfully download "' . $sourceUrl . '"', 503);
                 }
@@ -139,6 +141,14 @@ class Imagex {
 
     protected function getTempPath(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
         return $this->ensurePathExists($this->getConfigPath('temp_directory') . $this->getThumbFileName($parameters, $encoder, '-') . '.thumb');
+    }
+    
+    protected function getRandomTempPath() {
+        do {
+            $randomName = md5(time() . rand()) . '.rand.temp';
+            $randomPath = $this->ensurePathExists($this->getConfigPath('temp_directory') . $randomName);
+        } while(file_exists($randomName));
+        return $randomPath;
     }
 
     protected function getThumbPath(RequestParameters $parameters, $encoder = self::ENCODER_MD5) {
