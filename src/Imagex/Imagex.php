@@ -157,8 +157,8 @@ class Imagex {
 
     private function ensurePathExists($path) {
         $folder = substr($path, 0, strrpos($path, '/'));
-        if(!is_dir($folder)) {
-            mkdir($folder, 0755, true);
+        if(!is_dir($folder) && !mkdir($folder, 0755, true)) {
+            trigger_error('[IMAGEX-ERROR] Could not create directory "' . $path . '"', E_USER_WARNING);
         }
         return $path;
     }
