@@ -69,7 +69,7 @@ class Imagex {
             if(!$this->parameters->get('cache') || !file_exists($sourceImageFileName)) {
                 $sourceUrl = $this->parameters->get('url');
                 if($this->config['source_url_proxy']) {
-                    $sourceUrl = $this->config['source_url_proxy'] . urlencode($sourceUrl);
+                    $sourceUrl = $this->config['source_url_proxy'] . rawurlencode($sourceUrl);
                 }
                 $tmpFileName = $this->getRandomTempPath();
                 $success = @copy($sourceUrl, $tmpFileName);
